@@ -1,42 +1,40 @@
-﻿namespace PostsService.Core.Middlewares
+﻿namespace PostsService.Core.Middlewares;
+
+public class GlobalExceptionsMiddleware
 {
-    public class GlobalExceptionsMiddleware
+    private readonly ILogger<GlobalExceptionsMiddleware> _logger;
+    private readonly RequestDelegate _next;
+
+    public GlobalExceptionsMiddleware(ILogger<GlobalExceptionsMiddleware> logger, RequestDelegate next)
     {
-        private readonly ILogger<GlobalExceptionsMiddleware> _logger;
-        private readonly RequestDelegate _next;
+        _logger = logger;
+        _next = next;
+    }
 
-        public GlobalExceptionsMiddleware(ILogger<GlobalExceptionsMiddleware> logger, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _logger = logger;
-            _next = next;
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                Console.WriteLine("--> Inside Middleware");
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                await CatchException(context, ex);
-            }
-        }
-
-        public async Task CatchException(HttpContext context, Exception ex)
-        {
-            _logger.LogError(ex.ToString());
+            await CatchException(context, ex);
         }
     }
 
-
-    public static class GlobalExceptionsMiddlewareExtensions
+    public async Task CatchException(HttpContext context, Exception ex)
     {
+        _logger.LogError(ex.ToString());
+    }
+}
 
-        public static IApplicationBuilder UseGlobalExceptions(this IApplicationBuilder app)
-        {
-            return app.UseMiddleware<GlobalExceptionsMiddleware>();
-        }
+
+public static class GlobalExceptionsMiddlewareExtensions
+{
+
+    public static IApplicationBuilder UseGlobalExceptions(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<GlobalExceptionsMiddleware>();
     }
 }

@@ -1,17 +1,16 @@
-﻿namespace PostsService.Core
+﻿namespace PostsService.Core;
+
+public static class CoreServicesCollections
 {
-    public static class CoreServicesCollections
+    public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddCoreServices(this IServiceCollection services)
-        {
 
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
 
-            return services;
+        return services;
 
-        }
     }
 }
