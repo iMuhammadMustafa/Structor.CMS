@@ -2,10 +2,8 @@ using PostsService.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Add services to the container.
+builder.Services.AddCoreServices();
 
 var app = builder.Build();
 
