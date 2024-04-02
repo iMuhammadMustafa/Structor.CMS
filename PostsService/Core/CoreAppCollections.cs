@@ -16,6 +16,7 @@ namespace PostsService.Core
 
             app.UseHttpsRedirection();
 
+            app.UseGlobalExceptions();
 
             app.UseAuthentication();
             app.UseAuthorization();
