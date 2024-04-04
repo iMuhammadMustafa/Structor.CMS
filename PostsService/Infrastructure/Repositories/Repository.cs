@@ -5,8 +5,8 @@ using System.Linq.Expressions;
 namespace PostsService.Infrastructure.Repositories;
 
 public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
-                                                            where TEntity : IEntity
-                                                            where TContext : DbContext
+                                     where TEntity : IEntity
+                                     where TContext : DbContext
 {
     private readonly TContext _context;
 
@@ -85,10 +85,6 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
         await _context.SaveChangesAsync();
         return true;
     }
-    //public virtual async Task<IDisposable> Dispose()
-    //{
-    //    return await _context.DisposeAsync();
-    //}
 }
 
 

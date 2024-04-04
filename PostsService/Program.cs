@@ -12,6 +12,9 @@ builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Confi
 
 var app = builder.Build();
 
+//Init database
+//app.Services.GetRequiredService<AppDbContext>().Database.Migrate();
+
 // Configure the HTTP request pipeline.
 app.UseCoreApp();
 app.Run();
