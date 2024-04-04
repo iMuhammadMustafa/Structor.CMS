@@ -27,8 +27,8 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
-    <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Logs\" />
+    <Folder Include="Dtos\" />
     <Folder Include="Settings\" />
   </ItemGroup>
 

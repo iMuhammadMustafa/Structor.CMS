@@ -1,4 +1,5 @@
 ﻿using PostsService.Infrastructure;
+using PostsService.ServiceCollection;
 
 namespace PostsService.Core;
 
@@ -13,6 +14,7 @@ public static class CoreServicesCollections
 
 
         services.AddInfrastructureServicesCollection(_configuration);
+        services.AddRepositories(_configuration);
 
         return services;
 
