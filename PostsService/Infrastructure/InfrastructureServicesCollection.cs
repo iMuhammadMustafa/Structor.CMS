@@ -5,7 +5,7 @@ namespace PostsService.Infrastructure;
 
 public static class InfrastructureServicesCollection
 {
-    private const string CONNECTION_STRING_NAME = "PostgresConnection";
+    private const string CONNECTION_STRING_NAME = "DefaultConnection";
     public static IServiceCollection AddInfrastructureServicesCollection(this IServiceCollection services, IConfiguration _configuration)
     {
         services.AddAppDbContext(_configuration);
