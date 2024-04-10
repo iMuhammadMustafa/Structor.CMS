@@ -12,6 +12,8 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,8 +33,6 @@
   <ItemGroup>
     <Folder Include="Infrastructure\Migrations\" />
     <Folder Include="Logs\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="Services\" />
     <Folder Include="Settings\" />
   </ItemGroup>
 
