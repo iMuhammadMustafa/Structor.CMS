@@ -1,4 +1,4 @@
-﻿namespace PostsService.Dtos;
+﻿namespace PostsService.Features.Dtos;
 
 public record IDto
 {

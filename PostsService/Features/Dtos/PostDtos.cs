@@ -1,7 +1,15 @@
-﻿using PostsService.Entities;
+﻿namespace PostsService.Features.Dtos;
 
-namespace PostsService.Dtos;
 
+public record PostFormDto()
+{
+    public required string Title { get; set; }
+    public string? Content { get; set; }
+    public required int AuthorId { get; set; }
+    public bool IsPublished { get; set; } = false;
+    public int? CategoryId { get; set; }
+    public IEnumerable<TagFormDto>? Tags { get; set; }
+}
 
 public record PostDto() : IDto
 {
