@@ -47,6 +47,7 @@ public class PostsController : ControllerBase
     {
         var data = await _postsService.GetAllByTagId(tagId, pagination);
 
+
         var res = Response<IEnumerable<PostDto>>.Create()
                                                 .WithData(data)
                                                 .WithPagination(pagination);
@@ -73,14 +74,26 @@ public class PostsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async void Put(int id, [FromBody] PostFormDto postDto)
+    public async Task Put(int id, [FromBody] PostFormUpdateDto postDto)
     {
-        var result = await _postsService.Update(postDto);
+        var result = await _postsService.Update(id, postDto);
+    }
+    [HttpPut("{id}")]
+    public async Task AddTags(int id, [FromBody] IEnumerable<TagFormDto> tags)
+    {
+        var result = await _postsService.AddTags(id, tags);
+    }
+    [HttpPut("{id}")]
+    public async Task RemoveTags(int id, [FromBody] IEnumerable<int> tagIds)
+    {
+        var result = await _postsService.RemoveTags(id, tagIds);
     }
 
     [HttpDelete("{id}")]
-    public async void Delete(int id)
+    public async Task<ActionResult<bool>> Delete(int id)
     {
         var result = await _postsService.Delete(id);
+
+        return Ok(result);
     }
 }
