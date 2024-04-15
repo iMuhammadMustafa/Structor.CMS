@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PostsService.Features.Dtos;
 using PostsService.Features.Entities;
@@ -11,10 +11,12 @@ namespace PostsService.Features.Services;
 public class TagService : ITagService
 {
     private readonly ITagRepository _tagRepository;
+    private readonly IMapper _mapper;
 
-    public TagService(ITagRepository tagRepository)
+    public TagService(ITagRepository tagRepository, IMapper mapper)
     {
         _tagRepository = tagRepository;
+        _mapper = mapper;
     }
     public async Task<IEnumerable<TagDto>> GetAll(Pagination pagination)
     {
@@ -22,36 +24,36 @@ public class TagService : ITagService
                                         .Paginate(pagination.Page, pagination.Size)
                                         .ToListAsync();
 
-        return data.Adapt<IEnumerable<TagDto>>();
+        return _mapper.Map<IEnumerable<TagDto>>(data);
     }
     public async Task<TagDto?> FindById(int id)
     {
         var data = await _tagRepository.FindById(id);
 
-        return data?.Adapt<TagDto>();
+        return _mapper.Map<TagDto>(data);
     }
     public async Task<TagDto?> FindByGuid(Guid guid)
     {
         var data = await _tagRepository.FindByGuid(guid);
 
-        return data?.Adapt<TagDto>();
+        return _mapper.Map<TagDto>(data);
 
     }
     public async Task<TagDto> Insert(TagFormDto entity)
     {
-        var data = entity.Adapt<Tag>();
+        var data = _mapper.Map<Tag>(entity);
 
         await _tagRepository.Add(data, true);
 
-        return data.Adapt<TagDto>();
+        return _mapper.Map<TagDto>(data);
     }
     public async Task<TagDto> Update(TagFormDto entity)
     {
-        var data = entity.Adapt<Tag>();
+        var data = _mapper.Map<Tag>(entity);
 
         await _tagRepository.Update(data, true);
 
-        return data.Adapt<TagDto>();
+        return _mapper.Map<TagDto>(data);
     }
     public async Task<bool> Delete(int id)
     {

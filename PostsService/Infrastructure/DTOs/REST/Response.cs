@@ -9,9 +9,9 @@ public class Response<T>
     public int StatusCode { get; set; } = 200;
     public Pagination? Pagination { get; set; }
 
-    public static ResponseBuilder<T> Create()
+    public static Response<T> Create()
     {
-        return new ResponseBuilder<T>();
+        return new Response<T>();
     }
 
     public Response<T> WithData(T data, int statusCode = StatusCodes.Status200OK)

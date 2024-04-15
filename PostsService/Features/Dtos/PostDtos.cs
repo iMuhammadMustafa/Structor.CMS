@@ -8,8 +8,19 @@ public record PostFormDto()
     public required int AuthorId { get; set; }
     public bool IsPublished { get; set; } = false;
     public int? CategoryId { get; set; }
-    public IEnumerable<TagFormDto>? Tags { get; set; }
+    public List<TagFormDto>? Tags { get; set; }
 }
+
+public record PostFormUpdateDto()
+{
+    public required int Id { get; set; }
+    public required string Title { get; set; }
+    public string? Content { get; set; }
+    public required int AuthorId { get; set; }
+    public bool IsPublished { get; set; } = false;
+    public int? CategoryId { get; set; }
+}
+
 
 public record PostDto() : IDto
 {
@@ -25,6 +36,6 @@ public record PostDto() : IDto
 
     public int? CategoryId { get; set; }
     public CategoryDto? Category { get; set; }
-    public IEnumerable<TagDto>? Tags { get; set; }
+    public List<TagDto>? Tags { get; set; } = new List<TagDto>();
 
 }

@@ -1,4 +1,4 @@
-﻿using Mapster;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PostsService.Features.Dtos;
 using PostsService.Features.Entities;
@@ -11,10 +11,12 @@ namespace PostsService.Features.Services;
 public class CategoryService : ICategoryService
 {
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IMapper _mapper;
 
-    public CategoryService(ICategoryRepository categoryRepository)
+    public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
     {
         _categoryRepository = categoryRepository;
+        _mapper = mapper;
     }
     public async Task<IEnumerable<CategoryDto>> GetAll(Pagination pagination)
     {
@@ -22,36 +24,36 @@ public class CategoryService : ICategoryService
                                            .Paginate(pagination.Page, pagination.Size)
                                            .ToListAsync();
 
-        return data.Adapt<IEnumerable<CategoryDto>>();
+        return _mapper.Map<IEnumerable<CategoryDto>>(data);
     }
     public async Task<CategoryDto?> FindById(int id)
     {
         var data = await _categoryRepository.FindById(id);
 
-        return data?.Adapt<CategoryDto>();
+        return _mapper.Map<CategoryDto>(data);
     }
     public async Task<CategoryDto?> FindByGuid(Guid guid)
     {
         var data = await _categoryRepository.FindByGuid(guid);
 
-        return data?.Adapt<CategoryDto>();
+        return _mapper.Map<CategoryDto>(data);
 
     }
     public async Task<CategoryDto> Insert(CategoryFormDto entity)
     {
-        var data = entity.Adapt<Category>();
+        var data = _mapper.Map<Category>(entity);
 
         await _categoryRepository.Add(data, true);
 
-        return data.Adapt<CategoryDto>();
+        return _mapper.Map<CategoryDto>(data);
     }
     public async Task<CategoryDto> Update(CategoryFormDto entity)
     {
-        var data = entity.Adapt<Category>();
+        var data = _mapper.Map<Category>(entity);
 
         await _categoryRepository.Update(data, true);
 
-        return data.Adapt<CategoryDto>();
+        return _mapper.Map<CategoryDto>(data);
     }
     public async Task<bool> Delete(int id)
     {

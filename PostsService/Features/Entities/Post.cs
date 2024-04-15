@@ -7,7 +7,7 @@ public class Post : IEntity
 {
     public required string Title { get; set; }
     public string? Content { get; set; }
-    public required string Author { get; set; }
+    public string? Author { get; set; }
     public required int AuthorId { get; set; }
     public int Rating { get; set; }
     public int CommentCount { get; set; }
@@ -18,7 +18,7 @@ public class Post : IEntity
     [ForeignKey(nameof(Category))]
     public int? CategoryId { get; set; }
     public Category? Category { get; set; }
-    public IEnumerable<Tag> Tags { get; set; } = new List<Tag>();
+    public virtual List<Tag> Tags { get; set; } = new List<Tag>();
 
 
 

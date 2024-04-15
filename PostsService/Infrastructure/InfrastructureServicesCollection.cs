@@ -10,6 +10,9 @@ public static class InfrastructureServicesCollection
     {
         services.AddAppDbContext(_configuration);
 
+        services.AddAutoMapper(typeof(InfrastructureServicesCollection));
+
+
         return services;
     }
 
@@ -18,8 +21,8 @@ public static class InfrastructureServicesCollection
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING_NAME))
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            options.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING_NAME));
+            //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 
         return services;

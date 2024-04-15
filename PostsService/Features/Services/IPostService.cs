@@ -13,7 +13,9 @@ public interface IPostService
     Task<PostDto?> FindByGuid(Guid guid);
 
     Task<PostDto> Insert(PostFormDto entity);
-    Task<PostDto> Update(PostFormDto entity);
+    Task<PostDto> Update(int id, PostFormUpdateDto entity);
+    Task<PostDto> AddTags(int id, IEnumerable<TagFormDto> tags);
+    Task<PostDto> RemoveTags(int id, IEnumerable<int> tagIds);
     Task<bool> Delete(int id);
     Task<int> GetCount();
 }

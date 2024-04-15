@@ -70,7 +70,7 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
     }
     public virtual async Task<bool> Delete(TEntity entity, bool saveChanges = false)
     {
-        DbSet.Attach(entity);
+        //DbSet.Attach(entity);
         _context.Remove(entity);
         if (saveChanges)
         {

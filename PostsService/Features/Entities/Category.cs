@@ -9,5 +9,5 @@ public class Category : IEntity
     public string? Description { get; set; }
 
 
-    public IEnumerable<Post> Posts { get; set; } = new List<Post>();
+    public virtual List<Post> Posts { get; set; } = new List<Post>();
 }
