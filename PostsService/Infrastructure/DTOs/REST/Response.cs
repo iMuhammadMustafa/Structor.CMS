@@ -3,11 +3,15 @@
 public class Response<T>
 {
     public T? Data { get; set; }
+
+    //TODO: https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#problem-details-service
     public object? Error { get; set; }
     public string? ErrorMessage { get; set; }
     public ResponseStatus Status { get; set; }
     public int StatusCode { get; set; } = 200;
     public Pagination? Pagination { get; set; }
+
+    public bool IsSuccess => string.IsNullOrWhiteSpace(ErrorMessage);
 
     public static Response<T> Create()
     {
