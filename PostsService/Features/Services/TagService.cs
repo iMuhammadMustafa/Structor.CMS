@@ -47,9 +47,10 @@ public class TagService : ITagService
 
         return _mapper.Map<TagDto>(data);
     }
-    public async Task<TagDto> Update(TagFormDto entity)
+    public async Task<TagDto> Update(int id, TagFormDto entity)
     {
         var data = _mapper.Map<Tag>(entity);
+        data.Id = id;
 
         await _tagRepository.Update(data, true);
 

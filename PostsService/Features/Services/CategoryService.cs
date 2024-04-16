@@ -47,9 +47,10 @@ public class CategoryService : ICategoryService
 
         return _mapper.Map<CategoryDto>(data);
     }
-    public async Task<CategoryDto> Update(CategoryFormDto entity)
+    public async Task<CategoryDto> Update(int id, CategoryFormDto entity)
     {
         var data = _mapper.Map<Category>(entity);
+        data.Id = id;
 
         await _categoryRepository.Update(data, true);
 

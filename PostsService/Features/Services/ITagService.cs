@@ -10,7 +10,7 @@ public interface ITagService
     Task<TagDto?> FindByGuid(Guid guid);
 
     Task<TagDto> Insert(TagFormDto entity);
-    Task<TagDto> Update(TagFormDto entity);
+    Task<TagDto> Update(int id, TagFormDto entity);
     Task<bool> Delete(int id);
     Task<int> GetCount();
 }
