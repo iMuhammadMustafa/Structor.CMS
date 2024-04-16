@@ -8,7 +8,7 @@ using PostsService.Infrastructure.DTOs.REST;
 namespace PostsService.Features.Controllers;
 
 [ApiVersion("1.0")]
-[Route("api/v{v:apiVersion}/[controller]/[action]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 [ApiController]
 public class PostsController : ControllerBase
 {
@@ -20,39 +20,33 @@ public class PostsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetAll([FromQuery] Pagination pagination)
+    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetAll([FromQuery] int? categoryId,
+                                                                           [FromQuery] int? tagId,
+                                                                           [FromQuery] Pagination pagination)
     {
         var res = new Response<IEnumerable<PostDto>>();
 
-        var data = await _postsService.GetAll(pagination);
+        IEnumerable<PostDto> data;
+
+        if (categoryId.HasValue)
+        {
+            data = await _postsService.GetAllByCategoryId(categoryId.Value, pagination);
+        }
+        else if (tagId.HasValue)
+        {
+            data = await _postsService.GetAllByTagId(tagId.Value, pagination);
+        }
+        else
+        {
+            data = await _postsService.GetAll(pagination);
+        }
 
         res.WithData(data)
            .WithPagination(pagination);
         return Ok(res);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetAllByCategory([FromQuery] int categoryId, [FromQuery] Pagination pagination)
-    {
-        var res = new Response<IEnumerable<PostDto>>();
 
-        var data = await _postsService.GetAllByCategoryId(categoryId, pagination);
-
-        res.WithData(data)
-           .WithPagination(pagination);
-        return Ok(res);
-    }
-    [HttpGet]
-    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetAllByTag([FromQuery] int tagId, [FromQuery] Pagination pagination)
-    {
-        var data = await _postsService.GetAllByTagId(tagId, pagination);
-
-
-        var res = Response<IEnumerable<PostDto>>.Create()
-                                                .WithData(data)
-                                                .WithPagination(pagination);
-        return Ok(res);
-    }
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<PostDto>>> GetById(int id)
     {
@@ -74,16 +68,16 @@ public class PostsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task Put(int id, [FromBody] PostFormUpdateDto postDto)
+    public async Task Update([FromRoute] int id, [FromBody] PostFormUpdateDto postDto)
     {
         var result = await _postsService.Update(id, postDto);
     }
-    [HttpPut("{id}")]
+    [HttpPut("{id}/tags/add")]
     public async Task AddTags(int id, [FromBody] IEnumerable<TagFormDto> tags)
     {
         var result = await _postsService.AddTags(id, tags);
     }
-    [HttpPut("{id}")]
+    [HttpPut("{id}/tags/remove")]
     public async Task RemoveTags(int id, [FromBody] IEnumerable<int> tagIds)
     {
         var result = await _postsService.RemoveTags(id, tagIds);

@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 
 namespace PostsService.Infrastructure.Repositories;
 
+//TODO: Add AsNoTracking Tracking functionality (bool tracked = false maybe) 
 public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
                                      where TEntity : IEntity
                                      where TContext : DbContext
@@ -28,6 +29,7 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
     }
 
     public virtual IQueryable<TEntity> GetAll() => DbSet.AsQueryable();
+
     public virtual async Task<TEntity?> FindById(int id) => await DbSet.FirstOrDefaultAsync(Entity => Entity.Id == id) ?? null;
 
     public virtual async Task<TEntity?> FindByGuid(Guid guid) => await DbSet.FirstOrDefaultAsync(Entity => Entity.Guid == guid) ?? null;
@@ -49,6 +51,7 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
 
     public virtual async Task<TEntity> Add(TEntity entity, bool saveChanges = false)
     {
+        //_context.ChangeTracker.DetectChanges();
         var dbEntity = await DbSet.AddAsync(entity);
         if (saveChanges)
         {
@@ -71,6 +74,7 @@ public abstract class Repository<TEntity, TContext> : IRepository<TEntity>
     public virtual async Task<bool> Delete(TEntity entity, bool saveChanges = false)
     {
         //DbSet.Attach(entity);
+        _context.ChangeTracker.DetectChanges();
         _context.Remove(entity);
         if (saveChanges)
         {
