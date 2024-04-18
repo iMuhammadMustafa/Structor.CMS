@@ -119,6 +119,17 @@ public class Pagination
 {
     private int _pageNumber;
     private int _pageSize;
+
+    public Pagination()
+    {
+        _pageNumber = 0;
+        _pageSize = 10;
+    }
+    public Pagination(int pageNumber, int pageSize)
+    {
+        _pageNumber = pageNumber;
+        _pageSize = pageSize;
+    }
     public int Page
     {
         get

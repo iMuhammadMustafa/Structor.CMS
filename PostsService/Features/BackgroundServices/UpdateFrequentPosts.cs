@@ -1,12 +1,12 @@
-﻿namespace PostsService.Features.BackgroundServices;
+﻿using PostsService.Features.Services;
+
+namespace PostsService.Features.BackgroundServices;
 
 //TODO: Migrate to Azure Functions
 public class UpdateFrequentPosts : BackgroundService
 {
     private readonly ILogger<UpdateFrequentPosts> _logger;
     private readonly IServiceProvider _serviceProvider;
-
-
     private const int MILLISECONDS_UNTIL_APP_IS_READY = 1000;
 
     public UpdateFrequentPosts(ILogger<UpdateFrequentPosts> logger,
@@ -38,17 +38,28 @@ public class UpdateFrequentPosts : BackgroundService
                 await RunJob(stoppingToken);
             }
         }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("==> Timed Hosted Service is stopping.");
+        }
         catch (Exception e)
         {
-            _logger.LogInformation("Timed Hosted Service is stopping.");
             _logger.LogError(e.ToString());
         }
 
     }
 
+
+    //TODO: Need to fix the timer to run hourly or something no reason to cache every night where a post could be trending maybe(?) 
     private async Task RunJob(CancellationToken cancellationToken)
     {
-        using var serviceScope = _serviceProvider.CreateScope();
+        using IServiceScope servicesScope = _serviceProvider.CreateScope();
+
+        var _postsService = servicesScope.ServiceProvider.GetRequiredService<IPostService>();
+
+        await _postsService.CacheFrequentPosts();
+        _logger.LogInformation($"==> Cached Posts at {DateTime.Now}");
+
     }
 
 

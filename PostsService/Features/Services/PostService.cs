@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PostsService.Features.CachedServices;
 using PostsService.Features.Dtos;
 using PostsService.Features.Entities;
 using PostsService.Features.Repositories;
@@ -13,18 +14,50 @@ namespace PostsService.Features.Services
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IMapper _mapper;
+        private readonly ICachedFrequentPosts _cachedFrequentPosts;
 
-        public PostService(IPostRepository postRepository, ITagRepository tagRepository, IMapper mapper)
+        public PostService(IPostRepository postRepository,
+                           ITagRepository tagRepository,
+                           IMapper mapper,
+                           ICachedFrequentPosts cachedFrequentPosts)
         {
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _mapper = mapper;
+            _cachedFrequentPosts = cachedFrequentPosts;
         }
         public async Task<IEnumerable<PostDto>> GetAll(Pagination pagination)
         {
             var data = await _postRepository.GetAllPaginated(pagination);
             return _mapper.Map<IEnumerable<PostDto>>(data);
         }
+        public async Task<IEnumerable<PostDto>> GetFrequent()
+        {
+            var data = await _cachedFrequentPosts.GetCachedPosts();
+
+            if (data is null || data.Count() == 0)
+            {
+                data = await CacheFrequentPosts();
+            }
+            return data;
+        }
+
+        public async Task<IEnumerable<PostDto>> CacheFrequentPosts()
+        {
+            var dbData = await _postRepository.GetAllIncluding(x => x.Category, x => x.Tags)
+                                                .OrderBy(x => x.Rating)
+                                                .Where(x => x.CreatedAt > DateTime.Now.AddDays(-7))
+                                                .Take(10)
+                                                .ToListAsync();
+
+            var data = _mapper.Map<IEnumerable<PostDto>>(dbData);
+
+            await _cachedFrequentPosts.SetCachedPosts(data);
+
+            return data;
+
+        }
+
         public async Task<IEnumerable<PostDto>> GetAllByCategoryId(int categoryId, Pagination pagination)
         {
             var data = await _postRepository.GetAllByCategoryId(categoryId, pagination);

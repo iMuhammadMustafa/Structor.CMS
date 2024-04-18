@@ -6,6 +6,9 @@ namespace PostsService.Features.Services;
 public interface IPostService
 {
     Task<IEnumerable<PostDto>> GetAll(Pagination pagination);
+    Task<IEnumerable<PostDto>> GetFrequent();
+    Task<IEnumerable<PostDto>> CacheFrequentPosts();
+
     Task<IEnumerable<PostDto>> GetAllByCategoryId(int categoryId, Pagination pagination);
     Task<IEnumerable<PostDto>> GetAllByTagId(int tagId, Pagination pagination);
 

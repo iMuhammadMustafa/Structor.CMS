@@ -22,8 +22,9 @@ public class PostsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetAll([FromQuery] int? categoryId,
                                                                            [FromQuery] int? tagId,
-                                                                           [FromQuery] Pagination pagination)
+                                                                           [FromQuery] Pagination? pagination)
     {
+        if (pagination == null) pagination = new();
         var res = new Response<IEnumerable<PostDto>>();
 
         IEnumerable<PostDto> data;
@@ -46,6 +47,17 @@ public class PostsController : ControllerBase
         return Ok(res);
     }
 
+    [HttpGet("Frequent")]
+    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetFrequent()
+    {
+
+        IEnumerable<PostDto> data = await _postsService.GetFrequent();
+
+        var res = new Response<IEnumerable<PostDto>>();
+
+        res.WithData(data);
+        return Ok(res);
+    }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Response<PostDto>>> GetById(int id)

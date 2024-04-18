@@ -7,6 +7,7 @@ namespace PostsService.Infrastructure;
 public static class InfrastructureServicesCollection
 {
     private const string CONNECTION_STRING_NAME = "DefaultConnection";
+    private const string REDIS_CONNECTION_STRING_NAME = "Redis:ConnectionString";
     public static IServiceCollection AddInfrastructureServicesCollection(this IServiceCollection services, IConfiguration _configuration)
     {
         services.AddAppDbContext(_configuration);
@@ -15,6 +16,8 @@ public static class InfrastructureServicesCollection
 
 
         services.AddHostedService<UpdateFrequentPosts>();
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = _configuration[REDIS_CONNECTION_STRING_NAME]);
 
         return services;
     }

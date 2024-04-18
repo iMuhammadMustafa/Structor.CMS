@@ -1,4 +1,5 @@
-﻿using PostsService.Features.Repositories;
+﻿using PostsService.Features.CachedServices;
+using PostsService.Features.Repositories;
 using PostsService.Features.Services;
 
 namespace PostsService;
@@ -29,6 +30,8 @@ public static class ServicesCollectionExtensions
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ITagService, TagService>();
+
+        services.AddScoped<ICachedFrequentPosts, CachedFrequentPosts>();
 
 
         return services;
