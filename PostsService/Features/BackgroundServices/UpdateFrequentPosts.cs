@@ -32,7 +32,7 @@ public class UpdateFrequentPosts : BackgroundService
         {
             while (!stoppingToken.IsCancellationRequested && await timer.WaitForNextTickAsync(stoppingToken))
             {
-                timer.Period = TimeSpan.FromDays(1);
+                timer.Period = TimeSpan.FromHours(1);
                 _logger.LogInformation($"==> Timer is running at {DateTime.Now}");
                 _logger.LogInformation($"==> Next run will after {timer.Period.Days} Days, {timer.Period.Hours}:{timer.Period.Minutes}:{timer.Period.Seconds}");
                 await RunJob(stoppingToken);
@@ -50,7 +50,7 @@ public class UpdateFrequentPosts : BackgroundService
     }
 
 
-    //TODO: Need to fix the timer to run hourly or something no reason to cache every night where a post could be trending maybe(?) 
+    //TODO: It runs every hour now but I think it needs more work
     private async Task RunJob(CancellationToken cancellationToken)
     {
         using IServiceScope servicesScope = _serviceProvider.CreateScope();
