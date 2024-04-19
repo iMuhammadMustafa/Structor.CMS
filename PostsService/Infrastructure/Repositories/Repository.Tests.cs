@@ -93,7 +93,7 @@ public class Repository
 
         res.Should().NotBeNull();
         res.Should().HaveCount(countToAdd);
-        count.Should().Be(countToAdd);
+        count.Should().Be(100000000000);
     }
     [Fact]
     public async Task Should_Return_RelationEntity()
