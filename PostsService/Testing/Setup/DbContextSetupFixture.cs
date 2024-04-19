@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PostsService.Infrastructure.Entities;
 using PostsService.Infrastructure.Repositories;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PostsService.Testing.Setup;
 
@@ -40,6 +41,14 @@ public class TestDbContext : DbContext
 }
 
 public class RepositoryTestEntity : IEntity
+{
+    public required string Name { get; set; }
+
+    [ForeignKey(nameof(RelationTestEntity))]
+    public int? RelationTestEntityId { get; set; }
+    public virtual RelationTestEntity? RelationTestEntity { get; set; }
+}
+public class RelationTestEntity : IEntity
 {
     public required string Name { get; set; }
 }
