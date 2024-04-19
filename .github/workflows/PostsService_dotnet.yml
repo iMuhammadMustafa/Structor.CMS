@@ -6,12 +6,16 @@ on:
     branches: [ "main" ]
 
 defaults:
-  run:
-    working-directory: ./PostsService
+ run:
+   working-directory: ./PostsService
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    # defaults:
+    #   run:
+    #     working-directory: ./PostsService
 
     steps:
     - uses: actions/checkout@v4
@@ -20,12 +24,19 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
+      #working-directory: ./PostsService
       run: dotnet restore
     - name: Build
+      #working-directory: ./PostsService
       run: dotnet build --no-restore
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+  # test:
+  #   runs-on: ubuntu-latest
+    
+  #   defaults:
+  #     run:
+  #       working-directory: ./PostsService
+    
+  #   needs: build
+  #   steps:
