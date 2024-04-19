@@ -2,8 +2,12 @@ name: .NET
 on:
   push:
     branches: [ "main" ]
+    paths: 
+       - './PostsService/**'
   pull_request:
     branches: [ "main" ]
+    paths: 
+      - './PostsService/**'
 
 defaults:
  run:
