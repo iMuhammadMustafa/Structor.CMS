@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PostsService.Features.BackgroundServices;
 using PostsService.Infrastructure.DatabaseContext;
 
 namespace PostsService.Infrastructure;
@@ -12,6 +13,8 @@ public static class InfrastructureServicesCollection
 
         services.AddAutoMapper(typeof(InfrastructureServicesCollection));
 
+
+        services.AddHostedService<UpdateFrequentPosts>();
 
         return services;
     }
