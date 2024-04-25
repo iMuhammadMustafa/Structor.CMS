@@ -1,7 +1,8 @@
+server:
+  port: 5000
 spring:
   application:
     name: CommentsService
-    port: 5000
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3307/CommentsService?serverTimezone=UTC}
     username: ${JDBC_DATABASE_USERNAME:root}
