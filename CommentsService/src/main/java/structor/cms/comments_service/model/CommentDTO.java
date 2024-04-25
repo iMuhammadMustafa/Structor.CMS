@@ -3,10 +3,11 @@ package structor.cms.comments_service.model;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -42,6 +43,8 @@ public class CommentDTO {
     @NotNull
     private Integer postId;
 
-    private Integer parent;
+    private Integer parentId;
+
+    private List<CommentDTO> children = new ArrayList<>();
 
 }

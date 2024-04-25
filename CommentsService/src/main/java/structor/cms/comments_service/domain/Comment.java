@@ -11,7 +11,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Table(name = "Comments")
 @Getter
@@ -33,6 +32,9 @@ public class Comment extends IEntity {
     @Column(nullable = false)
     private Integer postId;
 
+    @Column(name = "parent_id", insertable = false, updatable = false)
+    private Integer parentId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parent;
@@ -40,4 +42,9 @@ public class Comment extends IEntity {
     @OneToMany(mappedBy = "parent")
     private Set<Comment> children;
 
+    // @NotNull
+    // @AssertFalse(message = "A comment cannot reference itself as a parent.")
+    // public boolean isParentSelfReferencing() {
+    // return this.parentId != null && this.parentId.equals(this.getId());
+    // }
 }

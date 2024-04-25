@@ -14,8 +14,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @MappedSuperclass
+// ASK: Why is this V ?
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
@@ -27,26 +27,18 @@ public abstract class IEntity {
     private Integer id;
 
     @Column(nullable = false, columnDefinition = "char(36)")
-    private UUID guid;
+    private UUID guid = UUID.randomUUID();
 
     @Column
-    private String createdBy;
-
-    @Column
-    private OffsetDateTime createdDate;
-
-    @Column
-    private String updatedBy;
-
-    @Column
-    private OffsetDateTime updatedDate;
+    private String createdBy = "SYSTEM";
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+    private OffsetDateTime createdDate = OffsetDateTime.now();
+
+    private String updatedBy;
 
     @LastModifiedDate
     @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
-
+    private OffsetDateTime updatedDate;
 }
