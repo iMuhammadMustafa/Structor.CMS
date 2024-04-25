@@ -1,10 +1,9 @@
-package structor.cms.comments_service.util;
+package structor.cms.comments_service.util.Exceptions;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
