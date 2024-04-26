@@ -59,6 +59,11 @@ namespace PostsService.Features.Services
 
             await _cachedFrequentPosts.SetCachedPosts(data);
 
+
+            var message = data.Select(x => new PostCached(x.Id, x.Guid)).ToArray();
+
+            await _bus.Publish(message);
+
             return data;
 
         }
