@@ -39,6 +39,8 @@ public static class InfrastructureServicesCollection
                 });
 
                 config.ConfigureEndpoints(context);
+                config.UseRawJsonSerializer();
+                config.UseRawJsonDeserializer();
             });
 
 

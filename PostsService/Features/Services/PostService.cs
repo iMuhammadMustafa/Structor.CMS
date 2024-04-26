@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using PostsService.Features.CachedServices;
 using PostsService.Features.Dtos;
@@ -6,6 +7,7 @@ using PostsService.Features.Entities;
 using PostsService.Features.Repositories;
 using PostsService.Infrastructure.DTOs.REST;
 using PostsService.Infrastructure.Extentions;
+using Structor.CMS.Integrations.MessagingContracts;
 
 namespace PostsService.Features.Services
 {
@@ -15,16 +17,19 @@ namespace PostsService.Features.Services
         private readonly ITagRepository _tagRepository;
         private readonly IMapper _mapper;
         private readonly ICachedFrequentPosts _cachedFrequentPosts;
+        private readonly IBus _bus;
 
         public PostService(IPostRepository postRepository,
                            ITagRepository tagRepository,
                            IMapper mapper,
-                           ICachedFrequentPosts cachedFrequentPosts)
+                           ICachedFrequentPosts cachedFrequentPosts,
+                           IBus bus)
         {
             _postRepository = postRepository;
             _tagRepository = tagRepository;
             _mapper = mapper;
             _cachedFrequentPosts = cachedFrequentPosts;
+            _bus = bus;
         }
         public async Task<IEnumerable<PostDto>> GetAll(Pagination pagination)
         {
@@ -173,7 +178,10 @@ namespace PostsService.Features.Services
 
             if (data == null) return false;
 
-            await _postRepository.Delete(data, true);
+            if (await _postRepository.Delete(data, true))
+            {
+                await _bus.Publish(new PostDeleted(id, data.Guid));
+            }
 
             return true;
         }
