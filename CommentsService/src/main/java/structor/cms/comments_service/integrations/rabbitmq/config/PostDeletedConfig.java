@@ -1,4 +1,4 @@
-package structor.cms.comments_service.config;
+package structor.cms.comments_service.integrations.rabbitmq.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -12,43 +12,43 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import structor.cms.comments_service.service.MessagingConsumer;
+import structor.cms.comments_service.integrations.rabbitmq.consumers.PostDeletedConsumer;
 
 @Configuration
-
-public class RabbitMQConfig {
+public class PostDeletedConfig {
     public static final String ExchangeName = "Structor.CMS.Integrations.MessagingContracts:PostDeleted";
     public static final String QueueName = "PostDeletedCommentsConsumer";
 
     @Bean
-    Queue queue() {
+    Queue postDeletedQueue() {
         return new Queue(QueueName);
     }
 
     @Bean
-    FanoutExchange exchange() {
+    FanoutExchange postDeletedExchange() {
         return new FanoutExchange(ExchangeName);
     }
 
     @Bean
-    Binding binding(Queue queue, FanoutExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange);
+    Binding postDeletedBinding(Queue postDeletedQueue, FanoutExchange postDeletedExchange) {
+        return BindingBuilder.bind(postDeletedQueue).to(postDeletedExchange);
     }
 
     @Bean
-    MessageListenerAdapter listenerAdapter(MessagingConsumer consumer, Jackson2JsonMessageConverter messageConverter) {
+    MessageListenerAdapter postDeletedListenerAdapter(PostDeletedConsumer consumer,
+            Jackson2JsonMessageConverter messageConverter) {
 
-        MessageListenerAdapter listenerAdapter = new MessageListenerAdapter(consumer, "postDeletedMessageRecieved");
-        listenerAdapter.setMessageConverter(messageConverter);
+        MessageListenerAdapter listenerAdapter = new MessageListenerAdapter(consumer, messageConverter);
         return listenerAdapter;
     }
 
     @Bean
-    MessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
+    MessageListenerContainer postDeletedContainer(ConnectionFactory connectionFactory,
+            MessageListenerAdapter postDeletedListenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(QueueName);
-        container.setMessageListener(listenerAdapter);
+        container.setMessageListener(postDeletedListenerAdapter);
         return container;
     }
 }
