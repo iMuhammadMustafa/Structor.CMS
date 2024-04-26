@@ -28,4 +28,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Page<Comment> findAllByAuthorIdAndPostId(final Integer authorId, final Integer postId, final Pageable pageable);
 
     Comment findFirstByParentAndIdNot(Comment comment, final Integer id);
+
+    void deleteAllByPostId(Integer postId);
 }

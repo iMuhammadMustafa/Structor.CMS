@@ -102,6 +102,11 @@ public class CommentService {
     }
 
     @Transactional
+    public void deleteByPostId(final Integer postId) {
+        commentRepository.deleteAllByPostId(postId);
+    }
+
+    @Transactional
     public void delete(final Integer id) {
         var comment = commentRepository.findById(id);
 
