@@ -1,5 +1,7 @@
 package structor.cms.comments_service.repos;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,6 +24,8 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Page<Comment> findAllByParentId(final Integer parentId, final Pageable pageable);
 
     Page<Comment> findAllByPostId(final Integer postId, final Pageable pageable);
+
+    List<Comment> findAllByPostIdIn(final List<Integer> postsIds);
 
     Page<Comment> findAllByAuthorId(final Integer authorId, final Pageable pageable);
 
