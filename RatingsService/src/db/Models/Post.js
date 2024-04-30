@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const postSchema = new Schema({
   postId: {
@@ -22,9 +22,13 @@ const postSchema = new Schema({
   updatedBy: {
     type: String,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 postSchema.index({ postId: 1, userId: 1 }, { unique: true });
 
-const Post = mongoose.model("Post", postSchema);
+const Post = model("Post", postSchema);
 
 export default Post;

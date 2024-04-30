@@ -1,9 +1,7 @@
+import { Schema, model } from "mongoose";
+
 const commentSchema = new Schema({
-  id: {
-    type: Number,
-    required: true,
-  },
-  postId: {
+  commentId: {
     type: Number,
     required: true,
   },
@@ -24,9 +22,13 @@ const commentSchema = new Schema({
   updatedBy: {
     type: String,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
-commentSchema.index({ postId: 1, userId: 1 }, { unique: true });
+commentSchema.index({ commentId: 1, userId: 1 }, { unique: true });
 
-const Comment = mongoose.model("Comments", commentSchema);
+const Comment = model("Comments", commentSchema);
 
 export default Comment;
