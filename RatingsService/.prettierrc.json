@@ -1,0 +1,22 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "singleQuote": false,
+  "tabWidth": 2,
+  "semi": true,
+  "printWidth": 120,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+
+  "importOrder": [
+    "^(^express$|@express|express|^recoil$)",
+    "<THIRD_PARTY_MODULES>",
+    "^@(.*)$",
+    "^@/(.*)$",
+    "^./[a-z]+/",
+    "^[./]"
+  ],
+  "importOrderGroupNamespaceSpecifiers": true,
+  "importOrderSortSpecifiers": true,
+  "importOrderSeparation": true
+}
