@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.UUID;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,12 @@ import structor.cms.comments_service.util.Exceptions.ReferencedWarning;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public CommentService(final CommentRepository commentRepository) {
+    public CommentService(final CommentRepository commentRepository,
+            final RedisTemplate<String, Object> redisTemplate) {
         this.commentRepository = commentRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     public Page<CommentDTO> findAll(FilterDTO filterDTO, Pageable pageable) {
@@ -62,6 +66,13 @@ public class CommentService {
 
         var res = comments.map(comment -> mapToDTO(comment, new CommentDTO()));
 
+        return res;
+    }
+
+    public List<CommentDTO> findAllByPostsId(final List<Integer> postsIds) {
+        final var comments = commentRepository.findAllByPostIdIn(postsIds);
+
+        var res = comments.stream().map(comment -> mapToDTO(comment, new CommentDTO())).toList();
         return res;
     }
 
@@ -99,6 +110,11 @@ public class CommentService {
                 .orElseThrow(NotFoundException::new);
         mapToEntity(commentDTO, comment);
         commentRepository.save(comment);
+    }
+
+    @Transactional
+    public void deleteByPostId(final Integer postId) {
+        commentRepository.deleteAllByPostId(postId);
     }
 
     @Transactional
