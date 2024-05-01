@@ -15,7 +15,11 @@ public static class CoreAppCollections
             options.MessageTemplate = "Request {RequestMethod} {RequestHost}{RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms - From {RemoteIpAddress}";
 
             // Emit debug-level events instead of the defaults
-            //options.GetLevel = (httpContext, elapsed, ex) => LogEventLevel.Debug;
+            if (app.Environment.IsDevelopment())
+            {
+                options.GetLevel = (httpContext, elapsed, ex) => Serilog.Events.LogEventLevel.Debug;
+            }
+
             //Attach additional properties to the request completion event
             options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
             {
