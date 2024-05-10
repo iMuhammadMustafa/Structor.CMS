@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "PostViewedFunction": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7189"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 30284,
+      "useSSL": true
+    }
+  }
+}
