@@ -26,6 +26,8 @@ public class GlobalExceptionsMiddleware
     public async Task CatchException(HttpContext context, Exception ex)
     {
         _logger.LogError(ex.ToString());
+
+        throw ex;
     }
 }
 

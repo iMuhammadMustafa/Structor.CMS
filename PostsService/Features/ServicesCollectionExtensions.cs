@@ -2,20 +2,20 @@
 using PostsService.Features.Repositories;
 using PostsService.Features.Services;
 
-namespace PostsService;
+namespace PostsService.Features;
 
 public static class ServicesCollectionExtensions
 {
 
     public static IServiceCollection AddRegisteredServices(this IServiceCollection services, IConfiguration _configuration)
     {
-        services.AddRepositories(_configuration);
+        services.RegisterRepositories(_configuration);
         services.RegisterService(_configuration);
 
         return services;
     }
 
-    public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration _configuration)
+    public static IServiceCollection RegisterRepositories(this IServiceCollection services, IConfiguration _configuration)
     {
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -32,7 +32,6 @@ public static class ServicesCollectionExtensions
         services.AddScoped<ITagService, TagService>();
 
         services.AddScoped<ICachedFrequentPosts, CachedFrequentPosts>();
-
 
         return services;
     }

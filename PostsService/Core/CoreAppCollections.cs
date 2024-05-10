@@ -8,7 +8,33 @@ public static class CoreAppCollections
     public static IApplicationBuilder UseCoreApp(this WebApplication app)
     {
 
+        app.UseSerilog();
 
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
+        app.UseHttpsRedirection();
+
+        app.UseGlobalExceptions();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+
+        return app;
+    }
+
+
+
+    public static IApplicationBuilder UseSerilog(this WebApplication app)
+    {
         app.UseSerilogRequestLogging(options =>
         {
             // Customize the message template   
@@ -28,24 +54,7 @@ public static class CoreAppCollections
                 diagnosticContext.Set("RemoteIpAddress", httpContext.Connection.RemoteIpAddress);
             };
         });
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-        app.UseSwagger();
-        app.UseSwaggerUI();
-
-        app.UseHttpsRedirection();
-
-        app.UseGlobalExceptions();
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
 
         return app;
     }
-
 }

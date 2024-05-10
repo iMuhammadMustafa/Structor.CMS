@@ -1,5 +1,5 @@
-using PostsService;
 using PostsService.Core;
+using PostsService.Features;
 using PostsService.Infrastructure;
 using Serilog;
 
