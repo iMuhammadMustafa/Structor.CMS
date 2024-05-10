@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "amqplib": "^0.10.4",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
@@ -22,7 +23,7 @@
     "eslint": "^9.1.1",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.2.5",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-autogen": "^2.23.7"
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8"
   }
 }

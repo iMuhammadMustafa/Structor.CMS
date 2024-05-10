@@ -11,8 +11,10 @@ import swaggerDocument from "./docs/swagger-output.json"  with { type: "json" };
 
 import  postsController from "./Controllers/PostsController.js";
 import  commentsController from "./Controllers/CommentsController.js";
+import { rabbitConnect } from "./Integration/PostDeletedConsumer.js";
 
 dbConnect();
+rabbitConnect();
 
 const app = express();
 
