@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "appInsights1": {
+      "type": "appInsights.sdk"
+    },
+    "storage1": {
+      "type": "storage.emulator",
+      "connectionId": "AzureWebJobsStorage"
+    },
+    "secrets1": {
+      "secretStore": null,
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/PostViewedFunctionvault",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri"
+    },
+    "rabbitmq1": {
+      "containerPorts": "5672:5672,15672:15672",
+      "secretStore": "AzureKeyVault",
+      "containerName": "rabbitmq",
+      "containerImage": "masstransit/rabbitmq:latest",
+      "type": "rabbitmq.container",
+      "connectionId": "RabbitMQ",
+      "dynamicId": null
+    }
+  }
+}

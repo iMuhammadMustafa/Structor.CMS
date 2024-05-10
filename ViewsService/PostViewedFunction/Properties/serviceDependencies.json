@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets",
+      "connectionId": "VaultUri"
+    },
+    "rabbitmq1": {
+      "type": "rabbitmq",
+      "connectionId": "RabbitMQ",
+      "dynamicId": null
+    },
+    "cosmos": {
+      "type": "cosmos",
+      "connectionId": "Cosmos",
+      "dynamicId": null
+    },
+    "cosmosKey": {
+      "type": "cosmosKey",
+      "connectionId": "CosmosKey",
+      "dynamicId": null
+    },
+    "appInsights1": {
+      "type": "appInsights",
+      "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "AzureWebJobsStorage"
+    }
+  }
+}
