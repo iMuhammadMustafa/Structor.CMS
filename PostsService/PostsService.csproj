@@ -9,9 +9,13 @@
     <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
+    <PropertyGroup>
+	    <EnvironmentName>Development</EnvironmentName>
+    </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-	    <Compile Remove="**/*.Tests.cs" />
+
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<Compile Remove="**/*.Tests.cs" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' != 'Release'">
         <PackageReference Include="coverlet.collector" Version="6.0.2">
@@ -44,6 +48,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

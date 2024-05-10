@@ -33,6 +33,9 @@ namespace PostsService.Features.Services
         }
         public async Task<IEnumerable<PostDto>> GetAll(Pagination pagination)
         {
+
+            await _bus.Publish<PostDeleted>(new PostDeleted(1, Guid.NewGuid()));
+
             var data = await _postRepository.GetAllPaginated(pagination);
             return _mapper.Map<IEnumerable<PostDto>>(data);
         }
