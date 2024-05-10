@@ -42,7 +42,6 @@ public class TagsController : ControllerBase
         return new Response<TagDto>().WithData(data);
     }
 
-    // PUT api/<ValuesController>/5
     [HttpPut("{id}")]
     public async Task<Response<TagDto>> Put([FromRoute] int id, [FromBody] TagFormDto tagFormDto)
     {

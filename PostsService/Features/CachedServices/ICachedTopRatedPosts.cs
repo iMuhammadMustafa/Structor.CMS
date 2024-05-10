@@ -2,7 +2,7 @@
 
 namespace PostsService.Features.CachedServices;
 
-public interface ICachedFrequentPosts
+public interface ICachedTopRatedPosts
 {
     Task<IEnumerable<PostDto>?> GetCachedPosts();
     Task<bool> SetCachedPosts(IEnumerable<PostDto> posts);

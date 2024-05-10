@@ -31,7 +31,7 @@ public static class ServicesCollectionExtensions
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ITagService, TagService>();
 
-        services.AddScoped<ICachedFrequentPosts, CachedFrequentPosts>();
+        services.AddScoped<ICachedTopRatedPosts, CachedTopRatedPosts>();
 
         return services;
     }

@@ -47,11 +47,11 @@ public class PostsController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("Frequent")]
-    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetFrequent()
+    [HttpGet("Rated")]
+    public async Task<ActionResult<Response<IEnumerable<PostDto>>>> GetTopRated()
     {
 
-        IEnumerable<PostDto> data = await _postsService.GetFrequent();
+        IEnumerable<PostDto> data = await _postsService.GetTopRated();
 
         var res = new Response<IEnumerable<PostDto>>();
 

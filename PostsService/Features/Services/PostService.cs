@@ -16,13 +16,13 @@ namespace PostsService.Features.Services
         private readonly IPostRepository _postRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IMapper _mapper;
-        private readonly ICachedFrequentPosts _cachedFrequentPosts;
+        private readonly ICachedTopRatedPosts _cachedFrequentPosts;
         private readonly IBus _bus;
 
         public PostService(IPostRepository postRepository,
                            ITagRepository tagRepository,
                            IMapper mapper,
-                           ICachedFrequentPosts cachedFrequentPosts,
+                           ICachedTopRatedPosts cachedFrequentPosts,
                            IBus bus)
         {
             _postRepository = postRepository;
@@ -33,13 +33,10 @@ namespace PostsService.Features.Services
         }
         public async Task<IEnumerable<PostDto>> GetAll(Pagination pagination)
         {
-
-            await _bus.Publish<PostDeleted>(new PostDeleted(1, Guid.NewGuid()));
-
             var data = await _postRepository.GetAllPaginated(pagination);
             return _mapper.Map<IEnumerable<PostDto>>(data);
         }
-        public async Task<IEnumerable<PostDto>> GetFrequent()
+        public async Task<IEnumerable<PostDto>> GetTopRated()
         {
             var data = await _cachedFrequentPosts.GetCachedPosts();
 
@@ -50,9 +47,10 @@ namespace PostsService.Features.Services
             return data;
         }
 
+        //TODO: Test
         public async Task<IEnumerable<PostDto>> CacheFrequentPosts()
         {
-            var dbData = await _postRepository.GetAllIncluding(x => x.Category, x => x.Tags)
+            var dbData = await _postRepository.GetAllIncluding(x => x.Category!, x => x.Tags)
                                                 .OrderBy(x => x.Rating)
                                                 .Where(x => x.CreatedAt > DateTime.Now.AddDays(-7))
                                                 .Take(10)
@@ -61,6 +59,17 @@ namespace PostsService.Features.Services
             var data = _mapper.Map<IEnumerable<PostDto>>(dbData);
 
             await _cachedFrequentPosts.SetCachedPosts(data);
+
+
+            //Fire async and forget
+            _ = Task.Run(() =>
+            {
+                foreach (var post in data)
+                {
+                    _bus.Publish(new PostCached(post.Id, post.Guid));
+                }
+
+            });
 
 
             var message = data.Select(x => new PostCached(x.Id, x.Guid)).ToArray();
@@ -90,6 +99,8 @@ namespace PostsService.Features.Services
 
             if (data == null) throw new Exception("There is no Post by that ID");
 
+            _ = _bus.Publish(new PostViewed(data.Id, data.Guid)); //Don't await the async
+
             return _mapper.Map<PostDto>(data);
         }
         public async Task<PostDto?> FindByGuid(Guid guid)
@@ -97,6 +108,8 @@ namespace PostsService.Features.Services
             var data = await _postRepository.FindByGuid(guid);
 
             if (data == null) throw new Exception("There is no Post by that Guid");
+
+            _ = _bus.Publish(new PostViewed(data.Id, data.Guid)); //Don't await the async
 
             return _mapper.Map<PostDto>(data);
 
