@@ -54,8 +54,14 @@ public static class InfrastructureServicesCollection
     {
         services.AddDbContext<AppDbContext>(options =>
         {
+#if DEBUG
             options.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING_NAME));
+
+#else
+            options.UseSqlServer(_configuration.GetConnectionString("AzureSQLConnection"));
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+#endif
         });
 
         return services;
