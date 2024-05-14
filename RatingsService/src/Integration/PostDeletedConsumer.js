@@ -18,12 +18,8 @@ async function rabbitConnect() {
     const amqpServer = `amqp://${RABBIT_USER}:${RABBIT_PASS}@${RABBIT_HOST}:${RABBIT_PORT}/`;
     connection = await amqplib.connect(amqpServer);
 
-    console.log("RabbitMQ connected");
 
     channel = await connection.createChannel();
-
-    console.log("Channel created");
-
 
     const queueName = RABBIT_MESSAGE_DELETED_QueueName;
     const exchangeName = RABBIT_MESSAGE_DELETED_ExchangeName;
@@ -42,18 +38,21 @@ async function rabbitConnect() {
         const message = msg.content.toString();
 
         const messageObj = JSON.parse(message);
-
-        console.log(messageObj);
-        
+                
         channel.ack(msg);
       }
     });
 
 
 
-    console.log("Queue created");
+    console.log(`--> RabbitMQ connected on ${RABBIT_HOST}:${RABBIT_PORT}`);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    console.log("--> Failed to Connect to RabbitMQ.");
+    console.log("--> Retrying connection in 10 seconds...");
+    setTimeout(async () => {
+      await rabbitConnect();
+    }, 10000);
   }
 }
 

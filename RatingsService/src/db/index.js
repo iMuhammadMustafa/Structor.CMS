@@ -4,9 +4,13 @@ const dbConnection = async () => {
   try {
     mongoose.set("strictQuery", false);
     const connection = await mongoose.connect(`${process.env.MONGO_URI}`);
-    console.log(`Connected to database on host ${connection.connection.host}`);
+    console.info(`--> Connected to database ${process.env.MONGO_URI}`);
   } catch (e) {
-    console.log(e);
+    console.error(e);
+    console.info('--> Retrying Database connection in 10 seconds...');
+    setTimeout(async () => {
+      await dbConnection();
+    }, 10000);
   }
 };
 
