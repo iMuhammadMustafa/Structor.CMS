@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postsservice
+  template:
+    metadata:
+      labels:
+        app: postsservice
+    spec:
+      containers:
+        - name: postsservice
+          image: postsservice
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: postsservice
+  ports:
+    - name: postsservice
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: postsservice
+  ports:
+    - protocol: TCP
+      port: 7157
+      targetPort: 8080

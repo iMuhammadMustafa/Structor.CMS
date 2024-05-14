@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postsdb-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postsdb
+  template:
+    metadata:
+      labels:
+        app: postsdb
+    spec:
+      containers:
+        - name: postsdb
+          image: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdbvol
+          env:
+            - name: POSTGRES_PASSWORD
+              # value: mysecretpassword
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: Password
+      volumes:
+        - name: postgresdbvol
+          persistentVolumeClaim:
+            claimName: postgres-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postsdb-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: postsdb
+  ports:
+    - name: postsdb
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postsdb-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: postsdb
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
