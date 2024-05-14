@@ -10,6 +10,7 @@ public static class InfrastructureServicesCollection
     private const string CONNECTION_STRING_NAME = "DefaultConnection";
     private const string REDIS_CONNECTION_STRING_NAME = "Redis:ConnectionString";
     private const string RabbitMQ_CONNECTION_HOST = "RabbitMq:Connection:Host";
+    private const string RabbitMQ_CONNECTION_PORT = "RabbitMq:Connection:Port";
     private const string RabbitMQ_CONNECTION_USERNAME = "RabbitMq:Connection:Username";
     private const string RabbitMQ_CONNECTION_PASSWORD = "RabbitMq:Connection:Password";
     public static IServiceCollection AddInfrastructureServicesCollection(this IServiceCollection services, IConfiguration _configuration)
@@ -32,7 +33,7 @@ public static class InfrastructureServicesCollection
 
             x.UsingRabbitMq((context, config) =>
             {
-                config.Host(_configuration[RabbitMQ_CONNECTION_HOST], "/", host =>
+                config.Host(_configuration[RabbitMQ_CONNECTION_HOST], ushort.Parse(_configuration[RabbitMQ_CONNECTION_PORT]), "/", host =>
                 {
                     host.Username(_configuration[RabbitMQ_CONNECTION_USERNAME]);
                     host.Password(_configuration[RabbitMQ_CONNECTION_PASSWORD]);
@@ -52,13 +53,19 @@ public static class InfrastructureServicesCollection
 
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration _configuration)
     {
+
+        Console.WriteLine(_configuration["ASPNETCORE_HelloWorld"]);
+        Console.WriteLine(_configuration["HelloWorld"]);
+
         services.AddDbContext<AppDbContext>(options =>
         {
 #if DEBUG
             options.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING_NAME));
 
 #else
-            options.UseSqlServer(_configuration.GetConnectionString("AzureSQLConnection"));
+            Console.WriteLine($"---> {_configuration.GetConnectionString(CONNECTION_STRING_NAME)}");
+            options.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING_NAME));
+            //options.UseSqlServer(_configuration.GetConnectionString("AzureSQLConnection"));
             //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
 #endif
