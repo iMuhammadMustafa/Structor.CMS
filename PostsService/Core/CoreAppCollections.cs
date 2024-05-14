@@ -35,7 +35,7 @@ public static class CoreAppCollections
         app.UseSwagger();
         app.UseSwaggerUI();
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         app.UseGlobalExceptions();
 
