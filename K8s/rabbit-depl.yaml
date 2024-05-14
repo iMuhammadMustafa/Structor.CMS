@@ -37,11 +37,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: postsdb-loadbalancer-srv
+  name: rabbit-admin-loadbalancer-srv
 spec:
   type: LoadBalancer
   selector:
-    app: postsdb
+    app: rabbit
   ports:
     - protocol: TCP
       port: 15672
