@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: cms.muhammadmustafa.dev
+      http:
+        paths:
+          - path: /postservice(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: posts-clusterip-srv
+                port:
+                  number: 80
+          - path: /rabbit
+            pathType: Prefix
+            backend:
+              service:
+                name: rabbit-clusterip-srv
+                port:
+                  number: 80

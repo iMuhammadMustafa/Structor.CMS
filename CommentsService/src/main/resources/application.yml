@@ -1,8 +1,10 @@
 server:
-  port: 5000
+  port: ${PORT:5000}
 spring:
+  config:
+    import: classpath:redis.yml, classpath:rabbit.yml
   application:
-    name: CommentsService
+    name: ${NAME:CommentsService}
   datasource:
     url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3307/CommentsService?serverTimezone=UTC}
     username: ${JDBC_DATABASE_USERNAME:root}
