@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "node ./src/docs/swagger.gen.js & nodemon src/index.js",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
