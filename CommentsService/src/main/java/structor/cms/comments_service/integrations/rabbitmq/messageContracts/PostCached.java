@@ -1,4 +1,4 @@
-﻿package structor.cms.comments_service.integrations.rabbitmq.messageContracts;
+package structor.cms.comments_service.integrations.rabbitmq.messageContracts;
 
 import java.util.UUID;
 
