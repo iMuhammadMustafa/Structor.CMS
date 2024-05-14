@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commentsservice
+  template:
+    metadata:
+      labels:
+        app: commentsservice
+    spec:
+      containers:
+        - name: commentsservice
+          image: commentsservice
+          imagePullPolicy: Never
+          env:
+            - name: PORT
+              value: "8080"
+            - name: JDBC_DATABASE_URL
+              value: jdbc:mysql://commentsdb-clusterip-srv:3306/CommentsDb?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+            - name: DATABASE_NAME
+              value: CommentsDb
+            - name: JDBC_DATABASE_USERNAME
+              value: newuser
+            - name: JDBC_DATABASE_PASSWORD
+              value: P4ssword!
+            - name: RABBIT_HOST
+              value: rabbit-clusterip-srv
+            - name: RABBIT_PORT
+              value: "80"
+            - name: RABBIT_USER
+              value: guest
+            - name: RABBIT_PASSWORD
+              value: guest
+            - name: REDIS_HOST
+              value: redis-loadbalancer-srv
+            - name: REDIS_PORT
+              value: "6379"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: commentsservice
+  ports:
+    - name: commentsservice
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comments-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: commentsservice
+  ports:
+    - name: commentsservice
+      protocol: TCP
+      port: 5000
+      targetPort: 8080

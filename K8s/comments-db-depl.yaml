@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: commentsdb-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: commentsdb
+  template:
+    metadata:
+      labels:
+        app: commentsdb
+    spec:
+      containers:
+        - name: commentsdb
+          image: mysql
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_P4ssword!
+            - name: MYSQL_USER
+              value: newuser
+            - name: MYSQL_PASSWORD
+              value: P4ssword!
+            - name: MYSQL_DATABASE
+              value: CommentsDb
+          volumeMounts:
+            - name: commentsdbvol
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: commentsdbvol
+          persistentVolumeClaim:
+            claimName: mysql-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: commentsdb-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: commentsdb
+  ports:
+    - name: commentsdb
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: commentsdb-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: commentsdb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
