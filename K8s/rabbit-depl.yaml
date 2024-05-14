@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit-depl
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rabbit
+    spec:
+      containers:
+        - name: rabbit
+          image: masstransit/rabbitmq
+  selector:
+    matchLabels:
+      app: rabbit
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbit
+  ports:
+    - name: rabbit
+      protocol: TCP
+      port: 80
+      targetPort: 5672
+    - name: admin
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postsdb-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: postsdb
+  ports:
+    - protocol: TCP
+      port: 15672
+      targetPort: 15672
