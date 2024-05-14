@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratingsdb-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratingsdb
+  template:
+    metadata:
+      labels:
+        app: ratingsdb
+    spec:
+      containers:
+        - name: ratingsdb
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongodbvol
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: mongoadmin
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: mysecretpassword
+            - name: MONGO_INITDB_DATABASE
+              value: StructorCMS
+            - name: authenticationDatabase
+          # command: ["/bin/bash", "-c"]
+          # args:
+          #   - mongo -u mongoadmin -p mysecretpassword --authenticationDatabase StructorCMS
+      volumes:
+        - name: mongodbvol
+          persistentVolumeClaim:
+            claimName: mongodb-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratingsdb-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: ratingsdb
+  ports:
+    - name: ratingsdb
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratingsdb-loadbalancer-srv
+spec:
+  type: LoadBalancer
+  selector:
+    app: ratingsdb
+  ports:
+    - protocol: TCP
+      port: 5672
+      targetPort: 27017
