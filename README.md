@@ -10,8 +10,8 @@ Each service is planned to be implemented using a different technology.
 - Let's dive a bit deeper
 ![Second Attempt](./readme/Slightly-Detailed-Arch.png)
 
-- A bit simpler: 
-![Third Attempt](./readme/Confusing-Arch.png)
+- A bit more confusing: 
+![Third Attempt](./readme/Slightly-Confusing-Arch.png)
 
 
 More explanation on the structure: 
