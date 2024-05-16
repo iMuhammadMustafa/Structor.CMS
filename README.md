@@ -4,29 +4,15 @@ This is an optimistic attempt to implement a **Content Management System** in a 
 
 Each service is planned to be implemented using a different technology.  
 
- - So this is the basic plan: 
-![First Attempt](./readme/Simple-Arch.png)
-
-- Let's dive a bit deeper
+- **A bit onthe Architeture:**
 ![Second Attempt](./readme/Slightly-Detailed-Arch.png)
 
-- A bit more confusing: 
+- **A bit deeper Architecture:** 
 ![Third Attempt](./readme/Slightly-Confusing-Arch.png)
 
+- **Kubernetes Architecture:**
+![Kubernetes Architecture](./readme/Kuberenetes.png)
 
-More explanation on the structure: 
-
-## Front-End 
-
-Front-End is divided into 2 parts so far
-- **General Pages:** where users/guests browse the posts, this will be a **React** Application
-- **Admin Pages:** where users/admin, this will be an **Angular** Application 
-- A React Native application will be added eventually. 
-
-**Front-End** will communicate with the **Back-End** through an **API Gateway**
-
-## API Gateway
-This in an **NGINX Ingress Controller** for **Kubernetes**.
 
 ## Back-End
 This is where the **Microservices** Shine. 
@@ -45,3 +31,15 @@ Details about each Service will be inside their respective folder.
 - **Views Service:** A NodeJS/Express Web API application. 
 	- Responsible for managing posts' views, It will also subscribe to some of the posts events. 
 - **Authentication Service**: A .NET Authentication Server responsible for handling **Users**, **Authentication** and **Authorization**.
+
+## Front-End 
+
+Front-End is divided into 2 parts so far
+- **General Pages:** where users/guests browse the posts, this will be a **React** Application
+- **Admin Pages:** where users/admin, this will be an **Angular** Application 
+- A **React Native** Crossplatform application will be added eventually. 
+
+**Front-End** will communicate with the **Back-End** through an **API Gateway**
+
+## API Gateway
+This in an **NGINX Ingress Controller** for **Kubernetes**.
